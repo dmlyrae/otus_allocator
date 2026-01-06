@@ -1,2 +1,1 @@
-# assembly_farm
-CMake and GitHub Actions Build Farm Project
+Кастомный аллокатор и контейнер.
