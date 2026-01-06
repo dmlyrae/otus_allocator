@@ -16,16 +16,25 @@ jobs:
 
       - name: Configure CMake
         # номер сборки из PATCH_VERSION
-        run: cmake . -DPATCH_VERSION=${{ github.run_number }}
+        run: |
+          mkdir -p build
+          cd build
+          cmake .. -DPATCH_VERSION=${{ github.run_number }}
 
       - name: Build
-        run: cmake --build .
+        run: |
+          cd build
+          cmake --build .
 
       - name: Test
-        run: ctest
+        run: |
+          cd build
+          ctest
 
       - name: Package
-        run: cmake --build . --target package
+        run: |
+          cd build
+          cmake --build . --target package
 
       - name: Create Release
         id: create_release
@@ -46,6 +55,6 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           # Имя файла должно совпадать с тем, что генерирует CPack
-          asset_path: ./helloworld-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: helloworld-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ./build/custom_allocator-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: custom_allocator-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
